@@ -10,6 +10,9 @@ import routes from './routes';
 
 const app = express();
 
+// Trust proxy for Vercel/Cloud deployment
+app.set('trust proxy', 1);
+
 // Security Middlewares
 app.use(helmet());
 app.use(cors({
