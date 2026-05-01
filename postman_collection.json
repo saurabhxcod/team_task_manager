@@ -1,0 +1,59 @@
+{
+  "info": {
+    "name": "Team Task Manager API",
+    "description": "API endpoints for Team Task Manager",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/v1/auth/login", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "login"] },
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@team.com\",\n  \"password\": \"Password123!\"\n}" }
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:5000/api/v1/auth/me", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "List Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:5000/api/v1/projects", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "projects"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "List Tasks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:5000/api/v1/tasks", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "v1", "tasks"] }
+          }
+        }
+      ]
+    }
+  ]
+}

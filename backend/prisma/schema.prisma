@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  password       String
+  name           String
+  avatar_url     String?
+  is_active      Boolean         @default(true)
+  created_at     DateTime        @default(now())
+  
+  projects       Project[]       @relation("ProjectOwner")
+  memberships    ProjectMember[]
+  tasks_created  Task[]          @relation("TaskCreator")
+  tasks_assigned Task[]          @relation("TaskAssignee")
+  comments       TaskComment[]
+  refresh_tokens RefreshToken[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  color       String?
+  status      String          @default("Active") // Active, Archived, Planning
+  owner_id    String
+  created_at  DateTime        @default(now())
+
+  owner       User            @relation("ProjectOwner", fields: [owner_id], references: [id])
+  members     ProjectMember[]
+  tasks       Task[]
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id         String   @id @default(uuid())
+  project_id String
+  user_id    String
+  role       String   // ADMIN, MEMBER
+  joined_at  DateTime @default(now())
+
+  project    Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([project_id, user_id])
+  @@index([user_id])
+  @@map("project_members")
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  status      String    @default("Todo") // Todo, In Progress, Review, Done
+  priority    String    @default("Medium") // Low, Medium, High
+  project_id  String
+  assignee_id String?
+  creator_id  String
+  due_date    DateTime?
+  completed_at DateTime?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  project     Project   @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  assignee    User?     @relation("TaskAssignee", fields: [assignee_id], references: [id])
+  creator     User      @relation("TaskCreator", fields: [creator_id], references: [id])
+  comments    TaskComment[]
+
+  @@index([project_id])
+  @@index([assignee_id])
+  @@index([status])
+  @@index([due_date])
+  @@map("tasks")
+}
+
+model TaskComment {
+  id         String   @id @default(uuid())
+  task_id    String
+  author_id  String
+  body       String
+  created_at DateTime @default(now())
+
+  task       Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  author     User     @relation(fields: [author_id], references: [id], onDelete: Cascade)
+
+  @@map("task_comments")
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String   @unique
+  expires_at DateTime
+  revoked    Boolean  @default(false)
+
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
