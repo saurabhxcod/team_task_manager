@@ -23,9 +23,9 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     const accessToken = signAccessToken(user.id);
     const refreshToken = signRefreshToken(user.id);
 
-    // Save refresh token
+
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
+    expiresAt.setDate(expiresAt.getDate() + 7);
     await prisma.refreshToken.create({
       data: { user_id: user.id, token: refreshToken, expires_at: expiresAt }
     });
@@ -34,7 +34,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
     res.status(201).json({

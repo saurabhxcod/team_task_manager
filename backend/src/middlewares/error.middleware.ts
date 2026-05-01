@@ -19,7 +19,7 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
       }
     });
   } else {
-    // Production error response
+
     if (err.isOperational) {
       res.status(err.statusCode).json({
         success: false,

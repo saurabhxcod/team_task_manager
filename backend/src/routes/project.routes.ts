@@ -16,7 +16,7 @@ router.patch('/:id', requireProjectAdmin, validate(updateProjectSchema), project
 router.delete('/:id', requireProjectAdmin, projectController.deleteProject);
 router.patch('/:id/archive', requireProjectAdmin, projectController.archiveProject);
 
-// Members routes
+
 router.get('/:id/members', requireProjectMember, projectController.listMembers);
 router.post('/:id/members/invite', requireProjectAdmin, validate(inviteMemberSchema), projectController.inviteMember);
 router.patch('/:id/members/:userId/role', requireProjectAdmin, validate(updateMemberRoleSchema), projectController.updateMemberRole);

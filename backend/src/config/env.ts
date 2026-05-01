@@ -14,7 +14,7 @@ export const env = {
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
 };
 
-// Validate required env vars
+
 const requiredEnvs = ['DATABASE_URL', 'JWT_ACCESS_SECRET', 'JWT_REFRESH_SECRET'];
 for (const reqEnv of requiredEnvs) {
   if (!process.env[reqEnv]) {

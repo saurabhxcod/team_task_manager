@@ -17,15 +17,15 @@ export const listTasks = async (req: Request, res: Response, next: NextFunction)
     if (assignee) whereClause.assignee_id = assignee;
     if (project) whereClause.project_id = project;
 
-    // Automatically mark overdue tasks
+
     await prisma.task.updateMany({
       where: {
         due_date: { lt: new Date() },
         status: { not: 'Done' }
       },
-      // Note: we can't easily add an "is_overdue" column if it's not in schema.
-      // But we can filter by due_date < now
-      data: { updated_at: new Date() } // Dummy update to trigger updated_at, but we fetch overdue directly
+
+
+      data: { updated_at: new Date() }
     });
 
     const tasks = await prisma.task.findMany({
@@ -54,7 +54,7 @@ export const listTasks = async (req: Request, res: Response, next: NextFunction)
 
 export const createTask = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Check if user is member of the project
+
     const membership = await prisma.projectMember.findUnique({
       where: { project_id_user_id: { project_id: req.body.project_id, user_id: req.user.id } }
     });

@@ -73,7 +73,7 @@ export const getWorkload = async (req: Request, res: Response, next: NextFunctio
       _count: { _all: true }
     });
 
-    // Populate user names
+
     const data = await Promise.all(workload.map(async w => {
       const user = await prisma.user.findUnique({ where: { id: w.assignee_id! }, select: { name: true, avatar_url: true } });
       return {
@@ -97,7 +97,7 @@ export const getActivity = async (req: Request, res: Response, next: NextFunctio
       select: { project_id: true }
     })).map(m => m.project_id);
 
-    // Activity feed from task updates and comments
+
     const tasks = await prisma.task.findMany({
       where: { project_id: { in: projectIds } },
       orderBy: { updated_at: 'desc' },

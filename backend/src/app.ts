@@ -10,10 +10,10 @@ import routes from './routes';
 
 const app = express();
 
-// Trust proxy for Vercel/Cloud deployment
+
 app.set('trust proxy', 1);
 
-// Security Middlewares
+
 app.use(helmet());
 app.use(cors({
   origin: env.FRONTEND_URL,
@@ -22,28 +22,28 @@ app.use(cors({
 app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
 
-// Logging
+
 if (env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 } else {
   app.use(morgan('combined'));
 }
 
-// Rate Limiting
+
 app.use('/api', apiLimiter);
 
-// Silence Favicon 404s
+
 app.get(['/favicon.ico', '/favicon.png'], (req, res) => res.status(204).end());
 
-// Welcome Route
+
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to TaskSync API', status: 'online' });
 });
 
-// Routes
+
 app.use('/api/v1', routes);
 
-// Error Handling
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 
