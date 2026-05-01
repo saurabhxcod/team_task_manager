@@ -5,23 +5,22 @@ import { CheckCircle2, Clock, AlertCircle, LayoutList } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '../hooks/useAuth';
 import { useTasks, useUpdateTaskStatus } from '../hooks/useTasks';
-import { Button } from '../components/ui/Button';
 
 export default function Dashboard() {
   const { user } = useAuth();
   const updateTaskStatus = useUpdateTaskStatus();
 
-  const { data: stats } = useQuery({
+  const { data: stats } = useQuery<Record<string, number>>({
     queryKey: ['dashboard', 'stats'],
     queryFn: async () => (await api.get('/dashboard/stats')).data.data
   });
 
-  const { data: overdue } = useQuery({
+  const { data: overdue } = useQuery<any[]>({
     queryKey: ['dashboard', 'overdue'],
     queryFn: async () => (await api.get('/dashboard/overdue')).data.data
   });
 
-  const { data: activity } = useQuery({
+  const { data: activity } = useQuery<any[]>({
     queryKey: ['dashboard', 'activity'],
     queryFn: async () => (await api.get('/dashboard/activity')).data.data
   });
