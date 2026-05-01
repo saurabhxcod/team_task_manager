@@ -32,6 +32,14 @@ if (env.NODE_ENV === 'development') {
 // Rate Limiting
 app.use('/api', apiLimiter);
 
+// Silence Favicon 404s
+app.get(['/favicon.ico', '/favicon.png'], (req, res) => res.status(204).end());
+
+// Welcome Route
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to TaskSync API', status: 'online' });
+});
+
 // Routes
 app.use('/api/v1', routes);
 
